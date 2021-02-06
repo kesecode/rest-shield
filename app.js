@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs');
 
 const serviceAccount = require("./secrets/firebase_key.json");
+const { stringify } = require("querystring");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -26,8 +27,12 @@ app.get('/api/get', verifyToken, (req, res) => {
                     res.sendStatus(404)
                   } else {
                       res.json({
-                          coverage: doc.data()
-                      })
+                        "schemaVersion": 1,
+                        "label": "coverage",
+                        "message": parse(JSON.stringify(doc.data())),
+                        "color": "orange"
+                    })
+                    res.sendStatus(200)
                   }
             } else {
                 res.sendStatus(403)
@@ -61,6 +66,10 @@ function verifyToken(req, res, next) {
     }
 }
 
+function parse(data) {
+    const obj = JSON.parse(data)
+    return obj.coverage
+}
 
 app.listen(3001, () => {
     console.log('Server started on 3001')
