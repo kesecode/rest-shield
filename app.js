@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const express = require('express')
 const jwt = require('jsonwebtoken')
+const fs = require('fs');
 
 const serviceAccount = require("./secrets/firebase_key.json");
 
@@ -11,37 +12,32 @@ admin.initializeApp({
 const db = admin.firestore()
 const app = express()
 
-app.get('/api/get', (req, res) => {
-    res.json({
-        message: 'Get'
-    })
-});
-
-app.post('/api/post', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
+app.get('/api/get', verifyToken, (req, res) => {
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if(err) {
             res.sendStatus(403)
         } else {
-            res.json({
-                message: 'Post'
-            })
+            const repo = req.headers['repo'];
+            if(typeof repo !== undefined) {
+                //get doc
+                const repoRef = db.collection('coverage').doc(repo);
+                const doc = await repoRef.get();
+                if (!doc.exists) {
+                    res.sendStatus(404)
+                  } else {
+                      res.json({
+                          coverage: doc.data()
+                      })
+                  }
+            } else {
+                res.sendStatus(403)
+            }
         }
     });
 });
 
-app.post('/api/login', (req, res) => {
-    //Mock user
-    const user = {
-        id: 1,
-        username: 'action',
-        email: 'abc@test.de'
-    }
-
-    jwt.sign({user}, 'secretkey', {expiresIn: '30s'}, (err, token) => {
-        res.json({
-            token
-        });
-    });
+app.post('/api/post', verifyToken, (req, res) => {
+    
 });
 
 
@@ -66,4 +62,17 @@ function verifyToken(req, res, next) {
 }
 
 
-app.listen(3001, () => console.log('Server started on 3001'));
+app.listen(3001, () => {
+    console.log('Server started on 3001')
+    //generate token
+    jwt.sign({}, 'secretkey', {/*expiresIn: '30s'*/}, async (err, token) => {
+        if(err) {
+            console.log(err)
+        } else {
+            const tokenRef = db.collection('token');
+            await tokenRef.doc('actions-token').set({
+                token: token
+              });
+        }
+    });
+});
