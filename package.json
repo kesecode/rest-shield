@@ -1,0 +1,29 @@
+{
+  "name": "rest-shield",
+  "version": "1.0.0",
+  "description": "RestAPI for creating shield.io badges",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kesecode/rest-shield.git"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "shieldio"
+  ],
+  "author": "David Weppler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kesecode/rest-shield/issues"
+  },
+  "homepage": "https://github.com/kesecode/rest-shield#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^9.4.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
