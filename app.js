@@ -58,31 +58,7 @@ app.get('/api/get/firebaseChat', async (req, res) => {
 });
 
 app.post('/api/post', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if(err) {
-            res.sendStatus(403)
-        } else {
-            const repo = req.headers['repo'];
-            if(typeof repo !== undefined) {
-                //get doc
-                const repoRef = db.collection('coverage').doc(repo);
-                const doc = await repoRef.get();
-                if (!doc.exists) {
-                    res.sendStatus(404)
-                  } else {
-                      res.json({
-                        "schemaVersion": 1,
-                        "label": "coverage",
-                        "message": parse(JSON.stringify(doc.data())),
-                        "color": "orange"
-                    })
-                    res.sendStatus(200)
-                  }
-            } else {
-                res.sendStatus(403)
-            }
-        }
-    });
+   
 });
 
 
