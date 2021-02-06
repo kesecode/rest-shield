@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs');
 
 const serviceAccount = require("./secrets/firebase_key.json");
-const { stringify } = require("querystring");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -41,8 +40,49 @@ app.get('/api/get', verifyToken, (req, res) => {
     });
 });
 
+app.get('/api/get/firebaseChat', async (req, res) => {
+    //get doc
+    const repoRef = db.collection('coverage').doc('FirebaseChat');
+    const doc = await repoRef.get();
+    if (!doc.exists) {
+            res.sendStatus(404)
+        } else {
+            res.json({
+            "schemaVersion": 1,
+            "label": "coverage",
+            "message": parse(JSON.stringify(doc.data())),
+            "color": "orange"
+            })
+            res.sendStatus(200)
+        }      
+});
+
 app.post('/api/post', verifyToken, (req, res) => {
-    
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if(err) {
+            res.sendStatus(403)
+        } else {
+            const repo = req.headers['repo'];
+            if(typeof repo !== undefined) {
+                //get doc
+                const repoRef = db.collection('coverage').doc(repo);
+                const doc = await repoRef.get();
+                if (!doc.exists) {
+                    res.sendStatus(404)
+                  } else {
+                      res.json({
+                        "schemaVersion": 1,
+                        "label": "coverage",
+                        "message": parse(JSON.stringify(doc.data())),
+                        "color": "orange"
+                    })
+                    res.sendStatus(200)
+                  }
+            } else {
+                res.sendStatus(403)
+            }
+        }
+    });
 });
 
 
