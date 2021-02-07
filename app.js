@@ -112,7 +112,7 @@ function createResponse(coverage) {
     if (coverage < 60) color = "orange"
     if (coverage < 50) color = "red"
 
-    return { "schemaVersion": 1, "label": "coverage", "message": String(coverage) + '%', "color": color }
+    return { "schemaVersion": 1, "label": "coverage", "message": String(coverage), "color": color }
 }
 
 
