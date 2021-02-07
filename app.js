@@ -36,6 +36,7 @@ app.get('/api/get/firebaseChat', async (req, res, next) => {
 
 
 app.post('/api/post', verifyToken, (req, res) => {
+    console.log('POST AUTH')
     const docRef = db.collection('coverage').doc('FirebaseChat');
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
@@ -51,6 +52,7 @@ app.post('/api/post', verifyToken, (req, res) => {
 
 
 app.post('/api/auth', (req, res) => {
+    console.log('POST AUTH')
     const authHeader = req.headers['authorization']
     let username, password;
     if (typeof authHeader !== 'undefined') {
