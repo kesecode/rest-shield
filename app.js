@@ -6,9 +6,11 @@ const jwt = require('jsonwebtoken');
 const serviceAccount = require("./secrets/firebase_key.json");
 const firebaseConfig = require("./secrets/firebaseConfig.json");
 
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
+
 
 const db = admin.firestore();
 const fire = firebase.initializeApp(firebaseConfig);
@@ -110,7 +112,7 @@ function createResponse(coverage) {
     if (coverage < 60) color = "orange"
     if (coverage < 50) color = "red"
 
-    return { "schemaVersion": 1, "label": "coverage", "message": coverage, "color": color }
+    return { "schemaVersion": 1, "label": "coverage", "message": String(coverage) + '%', "color": color }
 }
 
 
