@@ -44,7 +44,7 @@ app.post('/api/post', verifyToken, (req, res) => {
             return res.sendStatus(403);
         } else {
             const json = req.headers['json'];
-            let cov = parseCoverage(json);
+            let cov = Math.floor(parseCoverage(json) * 100);
             docRef.update({ "coverage": cov });
             return res.sendStatus(200);
         }
@@ -66,8 +66,6 @@ app.post('/api/auth', (req, res) => {
     fire.auth().signInWithEmailAndPassword(username, password)
         .then((userCredential) => {
             // Signed in
-            let user = userCredential.user;
-            console.log(user)
             jwt.sign({}, 'secretkey', { expiresIn: '30s' }, async (err, token) => {
                 if (err) {
                     console.log(err)
