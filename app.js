@@ -44,7 +44,7 @@ app.post('/api/post', verifyToken, (req, res) => {
             return res.sendStatus(403);
         } else {
             const json = req.headers['json'];
-            let cov = parseCoverage(json);
+            let cov = Math.floor(parseCoverage(json) * 100);
             docRef.update({ "coverage": cov });
             return res.sendStatus(200);
         }
