@@ -1,103 +1,121 @@
 const admin = require("firebase-admin");
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const fs = require('fs');
+const firebase = require("firebase");
+const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const serviceAccount = require("./secrets/firebase_key.json");
+const firebaseConfig = require("./secrets/firebaseConfig.json");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount)
 });
 
-const db = admin.firestore()
-const app = express()
+const db = admin.firestore();
+const fire = firebase.initializeApp(firebaseConfig);
+const app = express();
 
-app.get('/api/get', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if(err) {
-            res.sendStatus(403)
+
+app.get('/', (req, res) => {
+    return res.send('Hello');
+});
+
+
+app.get('/api/get/firebaseChat', async (req, res, next) => {
+    const docRef = db.collection('coverage').doc('FirebaseChat');
+    try {
+        const doc = await docRef.get()
+        if (!doc.exists) {
+            return res.sendStatus(404)
         } else {
-            const repo = req.headers['repo'];
-            if(typeof repo !== undefined) {
-                //get doc
-                const repoRef = db.collection('coverage').doc(repo);
-                const doc = await repoRef.get();
-                if (!doc.exists) {
-                    res.sendStatus(404)
-                  } else {
-                      res.json({
-                        "schemaVersion": 1,
-                        "label": "coverage",
-                        "message": parse(JSON.stringify(doc.data())),
-                        "color": "orange"
-                    })
-                    res.sendStatus(200)
-                  }
-            } else {
-                res.sendStatus(403)
-            }
+            res.json(createResponse(parseCoverage(JSON.stringify(doc.data()))))
+        }
+    } catch (error) {
+        return next(error);
+    }
+});
+
+
+app.post('/api/post', verifyToken, (req, res) => {
+    const docRef = db.collection('coverage').doc('FirebaseChat');
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            return res.sendStatus(403);
+        } else {
+            const json = req.headers['json'];
+            let cov = parseCoverage(json);
+            docRef.update({ "coverage": cov });
+            return res.sendStatus(200);
         }
     });
 });
 
-app.get('/api/get/firebaseChat', async (req, res) => {
-    //get doc
-    const repoRef = db.collection('coverage').doc('FirebaseChat');
-    const doc = await repoRef.get();
-    if (!doc.exists) {
-            res.sendStatus(404)
+
+app.post('/api/auth', (req, res) => {
+    const authHeader = req.headers['authorization']
+    let username, password;
+    if (typeof authHeader !== 'undefined') {
+        const auth = authHeader.split(' ');
+        username = auth[0];
+        password = auth[1];
+    } else {
+        return res.sendStatus(500);
+    }
+
+    fire.auth().signInWithEmailAndPassword(username, password)
+        .then((userCredential) => {
+            // Signed in
+            let user = userCredential.user;
+            console.log(user)
+        })
+        .catch((error) => {
+            console.log(error)
+            return res.sendStatus(403);
+        });
+
+    jwt.sign({}, 'secretkey', { expiresIn: '30s' }, async (err, token) => {
+        if (err) {
+            console.log(err)
+            return res.sendStatus(500);
         } else {
             res.json({
-            "schemaVersion": 1,
-            "label": "coverage",
-            "message": parse(JSON.stringify(doc.data())),
-            "color": "orange"
-            })
-            res.sendStatus(200)
-        }      
+                token
+            });
+        }
+    });
 });
 
-app.post('/api/post', verifyToken, (req, res) => {
-   
-});
-
-
-// verify token
 
 function verifyToken(req, res, next) {
-    // get auth header value
     const bearerHeader = req.headers['authorization']
-    // check if bearer is undefined
-    if(typeof bearerHeader !== 'undefined') {
-        // split at the space
+    if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ');
-        // get token from array
         const bearerToken = bearer[1];
-        // set the token
         req.token = bearerToken;
-        // next middleware
-        next();
+        return next();
     } else {
-        res.sendStatus(403);
+        return res.sendStatus(403);
     }
 }
 
-function parse(data) {
+
+function parseCoverage(data) {
     const obj = JSON.parse(data)
     return obj.coverage
 }
 
+
+function createResponse(coverage) {
+    let color = "brightgreen"
+    if (coverage < 95) color = "green"
+    if (coverage < 80) color = "yellowgreen"
+    if (coverage < 70) color = "yellow"
+    if (coverage < 60) color = "orange"
+    if (coverage < 50) color = "red"
+
+    return { "schemaVersion": 1, "label": "coverage", "message": coverage, "color": color }
+}
+
+
 app.listen(3001, () => {
-    console.log('Server started on 3001')
-    //generate token
-    jwt.sign({}, 'secretkey', {/*expiresIn: '30s'*/}, async (err, token) => {
-        if(err) {
-            console.log(err)
-        } else {
-            const tokenRef = db.collection('token');
-            await tokenRef.doc('actions-token').set({
-                token: token
-              });
-        }
-    });
+    console.log('Server started on 3001');
 });
