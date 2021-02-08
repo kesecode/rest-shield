@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const firebase = require("firebase");
+const auth = require("firebase");
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
@@ -11,19 +11,19 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
 
+const firestore = admin.firestore();
+const firebase = auth.initializeApp(firebaseConfig);
+const router = express();
+const port = 3001
 
-const db = admin.firestore();
-const fire = firebase.initializeApp(firebaseConfig);
-const app = express();
 
-
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     return res.send('Hello');
 });
 
 
-app.get('/api/get/firebaseChat', async (req, res, next) => {
-    const docRef = db.collection('coverage').doc('FirebaseChat');
+router.get('/api/get/firebaseChat', async (req, res, next) => {
+    const docRef = firestore.collection('coverage').doc('FirebaseChat');
     try {
         const doc = await docRef.get()
         if (!doc.exists) {
@@ -37,8 +37,8 @@ app.get('/api/get/firebaseChat', async (req, res, next) => {
 });
 
 
-app.post('/api/post', verifyToken, (req, res) => {
-    const docRef = db.collection('coverage').doc('FirebaseChat');
+router.post('/api/post', verifyToken, (req, res) => {
+    const docRef = firestore.collection('coverage').doc('FirebaseChat');
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             return res.sendStatus(403);
@@ -52,7 +52,7 @@ app.post('/api/post', verifyToken, (req, res) => {
 });
 
 
-app.post('/api/auth', (req, res) => {
+router.post('/api/auth', (req, res) => {
     const authHeader = req.headers['authorization']
     let username, password;
     if (typeof authHeader !== 'undefined') {
@@ -63,7 +63,7 @@ app.post('/api/auth', (req, res) => {
         return res.sendStatus(500);
     }
 
-    fire.auth().signInWithEmailAndPassword(username, password)
+    firebase.auth().signInWithEmailAndPassword(username, password)
         .then((userCredential) => {
             // Signed in
             jwt.sign({}, 'secretkey', { expiresIn: '30s' }, async (err, token) => {
@@ -114,6 +114,6 @@ function createResponse(coverage) {
 }
 
 
-app.listen(3001, () => {
-    console.log('Server started on 3001');
+router.listen(port, () => {
+    console.log('Server started on ', port);
 });
