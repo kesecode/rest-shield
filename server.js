@@ -3,7 +3,7 @@ const auth = require("firebase");
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const serviceAccount = require("./secrets/firebase_key.json");
+const serviceAccount = require("./secrets/firestoreKey.json");
 const firebaseConfig = require("./secrets/firebaseConfig.json");
 
 
@@ -11,10 +11,10 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
 
-const firestore = admin.firestore();
-const firebase = auth.initializeApp(firebaseConfig);
+const PORT = 3001
 const router = express();
-const port = 3001
+const firebase = auth.initializeApp(firebaseConfig);
+const firestore = admin.firestore();
 
 
 router.get('/', (req, res) => {
@@ -114,6 +114,6 @@ function createResponse(coverage) {
 }
 
 
-router.listen(port, () => {
-    console.log('Server started on ', port);
+router.listen(PORT, () => {
+    console.log('Server started on ', PORT);
 });
