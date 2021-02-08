@@ -1,2 +1,2 @@
 # rest-shield
-A rest API for creating shield.io badges
+A rest-api for creating shield.io badges
