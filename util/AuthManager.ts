@@ -1,27 +1,28 @@
-import ServerLogger from "./ServerLogger";
-const log = ServerLogger.getChildLog();
-import config from "../config/rest-shield-config.json";
-const firebaseConfig = require(config.firebase_config_location);
-import jwt, { SignCallback, VerifyCallback } from "jsonwebtoken";
-import auth from "firebase";
+import ServerLogger from './ServerLogger'
+const log = ServerLogger.getChildLog()
+import config from '../config/rest-shield-config.json'
+const firebaseConfig = require(config.firebase_config_location)
+import jwt, { SignCallback, VerifyCallback } from 'jsonwebtoken'
+import jwtSecret from '../secrets/jwtSecret.json'
+import auth from 'firebase'
 
 class AuthManager {
-  private static firebase = auth.initializeApp(firebaseConfig);
+  private static firebase = auth.initializeApp(firebaseConfig)
 
   verify(token: string, handler: VerifyCallback) {
-    jwt.verify(token, "secretkey", handler);
+    jwt.verify(token, 'secretkey', handler)
   }
 
   verifyToken(req: any, res: any, next: () => any) {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== "undefined") {
-      const bearer = bearerHeader.split(" ");
-      const bearerToken = bearer[1];
-      req.token = bearerToken;
-      return next();
+    const bearerHeader = req.headers['authorization']
+    if (typeof bearerHeader !== 'undefined') {
+      const bearer = bearerHeader.split(' ')
+      const bearerToken = bearer[1]
+      req.token = bearerToken
+      return next()
     } else {
-      log.warn("BEARER UNDEFINED");
-      return res.sendStatus(403);
+      log.warn('BEARER UNDEFINED')
+      return res.sendStatus(403)
     }
   }
 
@@ -30,14 +31,14 @@ class AuthManager {
       .auth()
       .signInWithEmailAndPassword(username, password)
       .then((userCredential: auth.auth.UserCredential) => {
-        log.info("LOGIN SUCCESS", userCredential.user?.email);
+        log.info('LOGIN SUCCESS', userCredential.user?.email)
         // Signed in
-        jwt.sign({}, "secretkey", { expiresIn: "30s" }, handle);
+        jwt.sign({}, jwtSecret.secret, { expiresIn: config.token_expiration_time }, handle)
       })
       .catch((err: any) => {
-        log.warn(err);
-        return;
-      });
+        log.warn(err)
+        return
+      })
   }
 }
-export default AuthManager;
+export default AuthManager
