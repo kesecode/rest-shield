@@ -2,8 +2,9 @@
   "name": "rest-shield",
   "version": "1.0.0",
   "description": "RestAPI for creating shield.io badges",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
+    "start": "tsc && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,9 +23,21 @@
   },
   "homepage": "https://github.com/kesecode/rest-shield#readme",
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb": "^18.2.1",
     "express": "^4.17.1",
     "firebase": "^8.2.6",
     "firebase-admin": "^9.4.2",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "tslog": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/firebase": "^3.2.1",
+    "@types/jsonwebtoken": "^8.5.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   }
 }

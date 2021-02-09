@@ -1,0 +1,6 @@
+{
+    "port": 3001,
+    "suppress_log_output": false,
+    "firebase_service_acc_key_location": "../secrets/firestoreKey.json",
+    "firebase_config_location": "../secrets/firebaseConfig.json"
+}
