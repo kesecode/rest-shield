@@ -4,7 +4,7 @@ class Helper {
     return obj.coverage
   }
 
-  createShieldResponse(coverage: Number): object {
+  createShieldResponse(coverage: number): object {
     let color = 'brightgreen'
     if (coverage < 95) color = 'green'
     if (coverage < 80) color = 'yellowgreen'
