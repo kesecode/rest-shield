@@ -1,9 +1,8 @@
-// Imports
-import express from 'express'
-const router = express.Router()
-// Local
-import AuthManager from '../util/AuthManager'
 import ServerLogger from '../util/ServerLogger'
+import AuthManager from '../util/AuthManager'
+import express from 'express'
+
+const router = express.Router()
 const authManager = new AuthManager()
 const log = ServerLogger.getChildLog()
 

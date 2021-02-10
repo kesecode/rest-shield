@@ -1,10 +1,11 @@
-import ServerLogger from './ServerLogger'
-const log = ServerLogger.getChildLog()
-import config from '../config/rest-shield-config.json'
-const firebaseConfig = require(config.firebase_config_location)
 import jwt, { SignCallback, VerifyCallback } from 'jsonwebtoken'
+import config from '../config/rest-shield-config.json'
 import jwtSecret from '../secrets/jwtSecret.json'
+import ServerLogger from './ServerLogger'
 import auth from 'firebase'
+const firebaseConfig = require(config.firebase_config_location)
+
+const log = ServerLogger.getChildLog()
 
 class AuthManager {
   private static firebase = auth.initializeApp(firebaseConfig)

@@ -1,11 +1,10 @@
-// Imports
-import express from 'express'
-const router = express.Router()
-// Local
-import Helper from '../util/Helper'
-const helper = new Helper()
 import DatabaseManager from '../util/DatabaseManager'
 import ServerLogger from '../util/ServerLogger'
+import Helper from '../util/Helper'
+import express from 'express'
+
+const router = express.Router()
+const helper = new Helper()
 const databaseManager = new DatabaseManager()
 const log = ServerLogger.getChildLog()
 

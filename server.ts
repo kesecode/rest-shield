@@ -1,13 +1,11 @@
-// Imports
-import express from 'express'
 import config from './config/rest-shield-config.json'
 import ServerLogger from './util/ServerLogger'
-const log = ServerLogger.getChildLog()
-
-//Routes
 import postRoutes from './routes/post'
 import getRoutes from './routes/get'
 import auth from './routes/auth'
+import express from 'express'
+
+const log = ServerLogger.getChildLog()
 
 const PORT = config.port
 const api = express()

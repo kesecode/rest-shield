@@ -1,8 +1,7 @@
-import ServerLogger from './ServerLogger'
-const log = ServerLogger.getChildLog()
 import config from '../config/rest-shield-config.json'
-const serviceAccount = require(config.firebase_service_acc_key_location)
+import ServerLogger from './ServerLogger'
 import admin from 'firebase-admin'
+const serviceAccount = require(config.firebase_service_acc_key_location)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
