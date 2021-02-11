@@ -35,7 +35,7 @@ jobs:
         cd secrets; ls;
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
         --output services.tar firebaseConfig.tar.gpg
-        tar xvf firebaseConfig.tar -C ./secrets/;
+        ls; tar xvf firebaseConfig.tar -C ./secrets/;
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
