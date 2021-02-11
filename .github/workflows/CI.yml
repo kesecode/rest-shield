@@ -41,7 +41,7 @@ jobs:
         --output $HOME/secrets/services.tar jwtSecret.tar.gpg
         tar xvf $HOME/secrets/jwtSecret.tar
       env:
-        SECRET_PASSPHARSE: ${{ secrets.SECRET_PASSPHRASE }}
+        SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
