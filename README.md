@@ -1,2 +1,4 @@
 # rest-shield
-A rest-api for creating shield.io badges
+![Test](https://github.com/kesecode/rest-shield/workflows/Test/badge.svg)
+
+JSON-endpoint for shield.io codecoverage badges
