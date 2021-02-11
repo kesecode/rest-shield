@@ -23,7 +23,7 @@
   "homepage": "https://github.com/kesecode/rest-shield#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "firebase": "^8.2.6",
+    "firebase": "^8.2.7",
     "firebase-admin": "^9.4.2",
     "jsonwebtoken": "^8.5.1"
   }
