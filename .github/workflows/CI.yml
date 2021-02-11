@@ -22,6 +22,7 @@ jobs:
       matrix:
         node-version: [15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    name: Node v15.x
 
     steps:
     - name: Checkout
@@ -45,5 +46,8 @@ jobs:
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
+      name: npm CI
     - run: npm run build --if-present
+      name: Build
     - run: npm test
+      name: Test
