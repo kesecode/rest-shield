@@ -106,6 +106,9 @@ dist
 secrets/firebaseConfig.json
 secrets/firestoreKey.json
 secrets/jwtSecret.json
+secrets/firebaseConfig.tar
+secrets/firestoreKey.tar
+secrets/jwtSecret.tar
 
 log/
 
