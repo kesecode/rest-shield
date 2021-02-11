@@ -32,9 +32,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Decrypt secrets
       run: |
+        cd secrets; ls;
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output /secrets/services.tar /secrets/firebaseConfig.tar.gpg
-        tar xvf /secrets/firebaseConfig.tar -C ./secrets/;
+        --output services.tar firebaseConfig.tar.gpg
+        tar xvf firebaseConfig.tar -C ./secrets/;
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
