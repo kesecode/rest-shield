@@ -34,12 +34,6 @@ jobs:
       run: ls; gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
         --output ./secrets/services.tar ./secrets/firebaseConfig.tar.gpg
         tar xvf ./secrets/firebaseConfig.tar -C ./secrets/;
-        gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output ./secrets/services.tar ./secrets/firestoreKey.tar.gpg
-        tar xvf ./secrets/firestoreKey.tar -C ./secrets/;
-        gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output secrets/services.tar secrets/jwtSecret.tar.gpg
-        tar xvf secrets/jwtSecret.tar -C ./secrets/;
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
