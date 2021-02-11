@@ -9,10 +9,9 @@ router.get('/', (req: any, res: any) => {
   return res.send('Hello')
 })
 
-router.get('/:username/:repo/:valueType', (req: any, res: any) => {
+router.get('/:username/:repo', async (req: any, res: any) => {
   try {
-    res.json(new Repository(req.params.username, req.params.repo).getCoverage())
-    return res.sendStatus(200)
+    res.json(await new Repository(req.params.username, req.params.repo).getShieldResponse())
   } catch (err) {
     log.error(err)
     return res.sendStatus(500)

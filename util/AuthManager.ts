@@ -12,7 +12,7 @@ class AuthManager {
 
   verify(token: string, handler: VerifyCallback) {
     log.info('verify')
-    jwt.verify(token, 'secretkey', handler)
+    jwt.verify(token, jwtSecret.secret, handler)
   }
 
   verifyToken(req: any, res: any, next: () => any) {

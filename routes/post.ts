@@ -7,13 +7,13 @@ const log = ServerLogger.getChildLog()
 const authManager = new AuthManager()
 const router = express.Router()
 
-router.post('/:username/:repo/:valueType', authManager.verifyToken, (req: any, res: any) => {
+router.post('/:username/:repo', authManager.verifyToken, (req: any, res: any) => {
   authManager.verify(req.token, err => {
     if (err) {
       return res.sendStatus(403)
     } else {
       try {
-        new Repository(req.params.username, req.params.repo).updateCoverage(req.headers['json'])
+        new Repository(req.params.username, req.params.repo).setCoverage(req.headers['json'])
         return res.sendStatus(200)
       } catch (err) {
         log.error(err)

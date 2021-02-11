@@ -10,14 +10,14 @@ admin.initializeApp({
 class DatabaseManager {
   private static firestore = admin.firestore()
 
-  async updateDocument(collectionPath: string, document: string, data: object): Promise<FirebaseFirestore.WriteResult> {
+  async setDocument(collectionPath: string, document: string, data: object): Promise<FirebaseFirestore.WriteResult> {
     const docRef = DatabaseManager.firestore.collection(collectionPath).doc(document)
     return await docRef.set(data)
   }
 
-  async getDocument(collectionPath: string, document: string): Promise<FirebaseFirestore.DocumentData> {
+  async getDocument(collectionPath: string, document: string): Promise<FirebaseFirestore.DocumentData | undefined> {
     const docRef = DatabaseManager.firestore.collection(collectionPath).doc(document)
-    return await docRef.get()
+    return (await docRef.get()).data()
   }
 }
 export default DatabaseManager
