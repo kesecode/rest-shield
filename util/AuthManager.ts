@@ -11,10 +11,12 @@ class AuthManager {
   private static firebase = auth.initializeApp(firebaseConfig)
 
   verify(token: string, handler: VerifyCallback) {
-    jwt.verify(token, 'secretkey', handler)
+    log.info('verify')
+    jwt.verify(token, jwtSecret.secret, handler)
   }
 
   verifyToken(req: any, res: any, next: () => any) {
+    log.info('verifyToken')
     const bearerHeader = req.headers['authorization']
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(' ')

@@ -1,27 +1,20 @@
-import DatabaseManager from '../util/DatabaseManager'
 import ServerLogger from '../util/ServerLogger'
-import Helper from '../util/Helper'
+import Repository from '../model/Repository'
 import express from 'express'
 
 const router = express.Router()
-const helper = new Helper()
-const databaseManager = new DatabaseManager()
 const log = ServerLogger.getChildLog()
 
 router.get('/', (req: any, res: any) => {
   return res.send('Hello')
 })
 
-router.get('/coverage/:username/:repo', async (req: any, res: any, next: any) => {
+router.get('/:username/:repo', async (req: any, res: any) => {
   try {
-    const doc = await databaseManager.getDocument(`shield/${req.params.username}/repositories/`, `${req.params.repo}`)
-    if (!doc.exists) {
-      return res.sendStatus(404)
-    } else {
-      res.json(helper.createShieldResponse(helper.parseCoverage(JSON.stringify(doc.data()))))
-    }
-  } catch (error) {
-    return next(error)
+    res.json(await new Repository(req.params.username, req.params.repo).getShieldResponse())
+  } catch (err) {
+    log.error(err)
+    return res.sendStatus(500)
   }
 })
 
