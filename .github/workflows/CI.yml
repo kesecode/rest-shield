@@ -32,13 +32,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Decrypt secrets
       run: gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output ./secrets/services.tar firebaseConfig.tar.gpg
+        --output ./secrets/services.tar ./secrets/firebaseConfig.tar.gpg
         tar xvf ./secrets/firebaseConfig.tar
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output ./secrets/services.tar firestoreKey.tar.gpg
+        --output ./secrets/services.tar ./secrets/firestoreKey.tar.gpg
         tar xvf ./secrets/firestoreKey.tar
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output ./secrets/services.tar jwtSecret.tar.gpg
+        --output ./secrets/services.tar ./secrets/jwtSecret.tar.gpg
         tar xvf ./secrets/jwtSecret.tar
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
