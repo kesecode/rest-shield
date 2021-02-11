@@ -1,24 +1,21 @@
 import DatabaseManager from '../util/DatabaseManager'
 
 class Repository {
-  username: string
-  repository: string
-  databaseManager = new DatabaseManager()
+  private username: string
+  private repository: string
+  private databaseManager = new DatabaseManager()
 
   constructor(username: string, repository: string) {
     this.repository = repository
     this.username = username
   }
 
-  setCoverage(json: string) {
+  setCoverage(json: string, rootPath = 'rest-shield') {
     const coverage = Math.floor(this.parseCoverage(json) * 100)
     this.databaseManager
-      .setDocument(`shield/${this.username}/repositories`, `${this.repository}`, {
+      .setDocument(`${rootPath}/${this.username}/repositories`, `${this.repository}`, {
         coverage: coverage,
         last_updated: new Date().toString(),
-      })
-      .then(result => {
-        console.log(`Document updated in ${result.writeTime}`)
       })
       .catch(err => {
         throw new Error(`Coverage update failed ${err}`)
@@ -27,12 +24,12 @@ class Repository {
 
   async getCoverage(): Promise<number> {
     let data = await this.fetchData()
-    return +JSON.parse(data).coverage
+    return this.parseCoverage(data)
   }
 
-  async fetchData(): Promise<string> {
+  async fetchData(rootPath = 'rest-shield'): Promise<string> {
     return JSON.stringify(
-      await this.databaseManager.getDocument(`shield/${this.username}/repositories/`, `${this.repository}`),
+      await this.databaseManager.getDocument(`${rootPath}/${this.username}/repositories/`, `${this.repository}`),
     )
   }
 
@@ -57,9 +54,13 @@ class Repository {
     }
   }
 
-  parseCoverage(data: any) {
+  parseCoverage(data: any): number {
     const obj = JSON.parse(data)
-    return obj.coverage
+    try {
+      return +obj.coverage
+    } catch (error) {
+      throw new Error('Data invalid')
+    }
   }
 }
 export default Repository
