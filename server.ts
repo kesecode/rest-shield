@@ -14,6 +14,6 @@ api.listen(PORT, () => {
   log.info('API LISTENING @', PORT)
 })
 
-api.use('/api/post', postRoutes)
-api.use('/api/get', getRoutes)
-api.use('/api/auth', auth)
+api.use('/post', postRoutes)
+api.use('/get', getRoutes)
+api.use('/auth', auth)

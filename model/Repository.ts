@@ -1,19 +1,31 @@
 import DatabaseManager from '../util/DatabaseManager'
+import config from '../config/rest-shield-config.json'
+import DatabaseManaging from '../util/util-interfaces/DatabaseManaging'
+import DatabaseManagerMock from '../test/unit-test/mocks/DatabaseManagerMock'
 
 class Repository {
   private username: string
   private repository: string
-  private databaseManager = new DatabaseManager()
+  private rootPath: string
+  private databaseManager: DatabaseManaging
 
-  constructor(username: string, repository: string) {
+  constructor(username: string, repository: string, databaseManager: DatabaseManaging = new DatabaseManager()) {
     this.repository = repository
     this.username = username
+    // Determine if environment == production || test
+    if (process.env.SHIELD_UNIT_TEST === 'true') {
+      this.rootPath = 'TEST'
+      this.databaseManager = new DatabaseManagerMock()
+    } else {
+      this.rootPath = process.env.SHIELD_INTEGRATION_TEST_ROOTPATH || config.db_root_path
+      this.databaseManager = databaseManager
+    }
   }
 
-  setCoverage(json: string, rootPath = 'rest-shield') {
+  setCoverage(json: string) {
     const coverage = Math.floor(this.parseCoverage(json) * 100)
     this.databaseManager
-      .setDocument(`${rootPath}/${this.username}/repositories`, `${this.repository}`, {
+      .setDocument(`${this.rootPath}/${this.username}/repositories`, `${this.repository}`, {
         coverage: coverage,
         last_updated: new Date().toString(),
       })
@@ -23,17 +35,16 @@ class Repository {
   }
 
   async getCoverage(): Promise<number> {
-    let data = await this.fetchData()
-    return this.parseCoverage(data)
+    return this.parseCoverage(await this.fetchData())
   }
 
-  async fetchData(rootPath = 'rest-shield'): Promise<string> {
+  async fetchData(): Promise<string> {
     return JSON.stringify(
-      await this.databaseManager.getDocument(`${rootPath}/${this.username}/repositories/`, `${this.repository}`),
+      await this.databaseManager.getDocument(`${this.rootPath}/${this.username}/repositories/`, `${this.repository}`),
     )
   }
 
-  async getShieldResponse(): Promise<object> {
+  async getShieldIoJsonResponse(): Promise<object> {
     try {
       let coverage = await this.getCoverage()
       let color = 'brightgreen'
@@ -54,12 +65,12 @@ class Repository {
     }
   }
 
-  parseCoverage(data: any): number {
+  parseCoverage(data: string): number {
     const obj = JSON.parse(data)
     try {
       return +obj.coverage
     } catch (error) {
-      throw new Error('Data invalid')
+      throw new Error('Invalid data')
     }
   }
 }

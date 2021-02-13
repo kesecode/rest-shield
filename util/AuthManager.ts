@@ -3,11 +3,12 @@ import config from '../config/rest-shield-config.json'
 import jwtSecret from '../secrets/jwtSecret.json'
 import ServerLogger from './ServerLogger'
 import auth from 'firebase'
+import AuthManaging from './util-interfaces/AuthManaging'
 const firebaseConfig = require(config.firebase_config_location)
 
 const log = ServerLogger.getChildLog()
 
-class AuthManager {
+class AuthManager implements AuthManaging {
   private static firebase = auth.initializeApp(firebaseConfig)
 
   verify(token: string, handler: VerifyCallback) {

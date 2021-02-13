@@ -7,7 +7,7 @@ const log = ServerLogger.getChildLog()
 const authManager = new AuthManager()
 const router = express.Router()
 
-router.post('/:username/:repo', authManager.verifyToken, (req: any, res: any) => {
+router.post('/:username/:repo/', authManager.verifyToken, (req: any, res: any) => {
   authManager.verify(req.token, err => {
     if (err) {
       return res.sendStatus(403)
