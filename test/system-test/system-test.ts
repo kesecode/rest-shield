@@ -38,7 +38,6 @@ describe('System-test: Test routes with full firebase integration', () => {
   beforeEach(done => setTimeout(done, 250))
 
   after(() => {
-    new DatabaseManager(config.test_db_root_path).deleteDocument(test_credentials.user)
     server.close()
     sinon.restore()
   })
@@ -56,7 +55,7 @@ describe('System-test: Test routes with full firebase integration', () => {
       })
   })
 
-  it('should authenticate via /auth and post randomized coverage via /post and testUser/testRepo', done => {
+  it('should authenticate via /auth and /post randomized coverage via /post and testUser/testRepo', done => {
     request(api)
       .post('/auth')
       .set({
@@ -126,7 +125,6 @@ describe('System-test with errors: Test "authManager" errors', () => {
   beforeEach(done => setTimeout(done, 250))
 
   after(() => {
-    new DatabaseManager().deleteDocument(test_credentials.user)
     server.close()
     sinon.restore()
   })
