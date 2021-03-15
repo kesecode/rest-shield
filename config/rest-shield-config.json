@@ -4,5 +4,6 @@
   "firebase_service_acc_key_location": "../secrets/firestore_key.json",
   "firebase_config_location": "../secrets/firebase_config.json",
   "token_expiration_time": "500s",
+  "test_db_root_path": "rest-shield-test",
   "db_root_path": "rest-shield"
 }
