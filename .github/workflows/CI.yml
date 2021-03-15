@@ -17,7 +17,9 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version:
+          - 15.x
+          - 16.x
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and Test
 
@@ -49,7 +51,7 @@ jobs:
       name: npm CI
     - run: npm run build --if-present
       name: Build
-    - run: npm test; ls;
+    - run: npm test;
       name: Test
     - uses: actions/upload-artifact@v2
       name: Upload coverage-summary.json
