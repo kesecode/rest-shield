@@ -1,0 +1,23 @@
+name: Deploy
+ 
+on:
+  push:
+    branches:
+     - main
+ 
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy rest-shield
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST_ADDRESS }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /opt/hosted-services/rest-shield/
+            git pull
+            npm install
+            pm2 restart /opt/hosted-services/rest-shield/server.ts --name rest-shield
