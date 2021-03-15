@@ -64,7 +64,7 @@ jobs:
   uploadResult:
   
       needs: build
-      name: Upload Coverage-Result
+      name: Upload Result
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v2
