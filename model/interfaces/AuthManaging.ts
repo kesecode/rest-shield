@@ -5,6 +5,6 @@ interface AuthManaging {
 
   verifyToken(req: any, res: any, next: () => any): void
 
-  login(username: string, password: string, handle: SignCallback): void
+  login(req: any, res: any, next: () => any): void
 }
 export default AuthManaging
