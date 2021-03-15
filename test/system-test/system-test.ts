@@ -1,6 +1,7 @@
 import request from 'supertest'
 import expect from 'chai'
 import express, { Router } from 'express'
+import config from '../../config/rest-shield-config.json'
 import test_credentials from '../../secrets/test_credentials.json'
 import AuthRouterFactory from '../../model/factories/AuthRouterFactory'
 import PostRouterFactory from '../../model/factories/PostRouterFactory'
@@ -24,8 +25,8 @@ describe('System-test: Test routes with full firebase integration', () => {
     server = api.listen(3002, () => {})
 
     let authRouter = new AuthRouterFactory().makeRouter()
-    let postRouter = new PostRouterFactory(undefined, new DatabaseManager()).makeRouter()
-    let getRouter = new GetRouterFactory(new DatabaseManager()).makeRouter()
+    let postRouter = new PostRouterFactory(undefined, new DatabaseManager(config.test_db_root_path)).makeRouter()
+    let getRouter = new GetRouterFactory(new DatabaseManager(config.test_db_root_path)).makeRouter()
 
     api.use('/auth', authRouter)
     api.use('/post', postRouter)
@@ -37,7 +38,7 @@ describe('System-test: Test routes with full firebase integration', () => {
   beforeEach(done => setTimeout(done, 250))
 
   after(() => {
-    new DatabaseManager().deleteDocument(test_credentials.user)
+    new DatabaseManager(config.test_db_root_path).deleteDocument(test_credentials.user)
     server.close()
     sinon.restore()
   })
@@ -112,7 +113,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
     server = api.listen(3002, () => {})
 
     let authRouter = new AuthRouterFactory().makeRouter()
-    let postRouter = new PostRouterFactory(undefined, new DatabaseManager()).makeRouter()
+    let postRouter = new PostRouterFactory(undefined, new DatabaseManager(config.db_root_path)).makeRouter()
     let getRouter = new GetRouterFactory(new DatabaseManager()).makeRouter()
 
     api.use('/auth', authRouter)
