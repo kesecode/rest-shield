@@ -103,6 +103,15 @@ dist
 # TernJS port file
 .tern-port
 
-secrets/
+secrets/firebase_config.json
+secrets/firestore_key.json
+secrets/secret_key.json
+secrets/test_credentials.json
+secrets/firebase_config.tar
+secrets/firestore_key.tar
+secrets/secret_key.tar
+secrets/test_credentials.tar
+
+log/
 
 .DS_Store
