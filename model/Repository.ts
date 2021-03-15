@@ -1,66 +1,85 @@
-import DatabaseManager from '../util/DatabaseManager'
+import RepositoryAttributeType from './enums/RepositoryAttributeType'
+import DatabaseManaging from './interfaces/DatabaseManaging'
+import RepositoryAttribute from './interfaces/RepositoryAttribute'
+import ShieldBadge from './interfaces/ShieldBadge'
+import Coverage from './repo-attributes/Coverage'
 
 class Repository {
   private username: string
   private repository: string
-  private databaseManager = new DatabaseManager()
+  private databaseManager: DatabaseManaging
+  private attributes: Set<RepositoryAttribute>
 
-  constructor(username: string, repository: string) {
+  constructor(username: string, repository: string, databaseManager: DatabaseManaging) {
     this.repository = repository
     this.username = username
+    this.databaseManager = databaseManager
+    this.attributes = new Set()
   }
 
-  setCoverage(json: string, rootPath = 'rest-shield') {
-    const coverage = Math.floor(this.parseCoverage(json) * 100)
-    this.databaseManager
-      .setDocument(`${rootPath}/${this.username}/repositories`, `${this.repository}`, {
-        coverage: coverage,
-        last_updated: new Date().toString(),
-      })
-      .catch(err => {
-        throw new Error(`Coverage update failed ${err}`)
-      })
+  persistRepository() {
+    this.databaseManager.setDocument(`${this.username}/repositories`, `${this.repository}`, {
+      attributes: JSON.stringify([...this.attributes]),
+    })
   }
 
-  async getCoverage(): Promise<number> {
-    let data = await this.fetchData()
-    return this.parseCoverage(data)
-  }
-
-  async fetchData(rootPath = 'rest-shield'): Promise<string> {
-    return JSON.stringify(
-      await this.databaseManager.getDocument(`${rootPath}/${this.username}/repositories/`, `${this.repository}`),
-    )
-  }
-
-  async getShieldResponse(): Promise<object> {
-    try {
-      let coverage = await this.getCoverage()
-      let color = 'brightgreen'
-      if (coverage < 95) color = 'green'
-      if (coverage < 80) color = 'yellowgreen'
-      if (coverage < 70) color = 'yellow'
-      if (coverage < 60) color = 'orange'
-      if (coverage < 50) color = 'red'
-
-      return {
-        schemaVersion: 1,
-        label: 'coverage',
-        message: String(coverage) + '%',
-        color: color,
+  async fetchRepository() {
+    await this.databaseManager.getDocument(`${this.username}/repositories/`, `${this.repository}`).then(res => {
+      if (res) {
+        if (res.attributes) {
+          this.attributes = new Set<RepositoryAttribute>(this.deserializeRepositoryAttributes(res.attributes))
+        }
       }
-    } catch (err) {
-      throw new Error(err)
+    })
+  }
+
+  deserializeRepositoryAttributes(attributes: string): RepositoryAttribute[] {
+    let result: RepositoryAttribute[] = []
+    for (let entry of JSON.parse(attributes)) {
+      switch (entry.type) {
+        case RepositoryAttributeType.coverage:
+          result.push(new Coverage(entry.value, entry.date))
+          break
+        default:
+          throw new Error(`Cannot find a implementation for the given RepositoryAttributeType: ${entry.type}`)
+      }
+    }
+    return result
+  }
+
+  createRepositoryAttribute(value: any, type: string): RepositoryAttribute {
+    if (value) {
+      switch (type) {
+        case RepositoryAttributeType.coverage:
+          return new Coverage(value)
+        default:
+          throw new Error(`Cannot find a implementation for the given RepositoryAttributeType: ${type}`)
+      }
+    } else {
+      throw new Error(`Given attribute value is undefined`)
     }
   }
 
-  parseCoverage(data: any): number {
-    const obj = JSON.parse(data)
-    try {
-      return +obj.coverage
-    } catch (error) {
-      throw new Error('Data invalid')
+  updateRepositoryAttribute(attribute: RepositoryAttribute) {
+    this.fetchRepository().then(() => {
+      for (let entry of this.attributes.values()) {
+        if (entry.type === attribute.type) {
+          this.attributes.delete(entry)
+          this.attributes.add(attribute)
+          break
+        }
+      }
+      if (!this.attributes.has(attribute)) this.attributes.add(attribute)
+      this.persistRepository()
+    })
+  }
+
+  async getShieldIoJSON(type: RepositoryAttributeType): Promise<ShieldBadge | undefined> {
+    await this.fetchRepository()
+    for (let entry of this.attributes) {
+      if (entry.type === type) return entry.getShieldIoJSON()
     }
+    return undefined
   }
 }
 export default Repository
