@@ -1,9 +1,10 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Test
+name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -52,5 +53,30 @@ jobs:
       name: npm CI
     - run: npm run build --if-present
       name: Build
-    - run: npm test
+    - run: npm test; ls;
       name: Test
+    - uses: actions/upload-artifact@v2
+      name: Upload coverage-summary.json
+      with:
+          name: coverage
+          path: coverage/
+  
+  uploadResult:
+  
+      needs: build
+      name: Upload Result
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        
+      - uses: actions/download-artifact@v2
+        name: Download coverage-summary.json
+        with:
+          name: coverage
+
+      - name: Upload data
+        run: chmod +x .github/scripts/rest_connect.sh; sh .github/scripts/rest_connect.sh
+        env:
+          USER: ${{ secrets.REST_USER }}
+          PASSWORD: ${{ secrets.REST_PASSWORD }}
