@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "start": "tsc && node dist/server.js",
-    "test": "nyc mocha --require ts-node/register --exit --watch-extensions ts './test/**/*.ts'"
+    "test": "nyc --reporter=json-summary mocha --require ts-node/register --exit --watch-extensions ts './test/**/*.ts'",
+    "posttest": "jq -n --arg cov $(jq -r '.total.lines.pct' coverage/coverage-summary.json) '{\"value\": $cov}' > coverage/coverage.json"
   },
   "repository": {
     "type": "git",
