@@ -32,7 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "sinon": "^9.2.4",
-    "tslog": "^3.1.1"
+    "tslog": "^3.1.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",
