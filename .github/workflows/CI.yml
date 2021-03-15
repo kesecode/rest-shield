@@ -35,14 +35,17 @@ jobs:
       run: |
         cd secrets;
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output firebaseConfig.tar firebaseConfig.tar.gpg
-        tar xvf firebaseConfig.tar
+        --output firebase_config.tar firebase_config.tar.gpg
+        tar xvf firebase_config.tar
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output firestoreKey.tar firestoreKey.tar.gpg
-        tar xvf firestoreKey.tar
+        --output firestore_key.tar firestore_key.tar.gpg
+        tar xvf firestore_key.tar
         gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
-        --output jwtSecret.tar jwtSecret.tar.gpg
-        tar xvf jwtSecret.tar
+        --output secret_key.tar secret_key.tar.gpg
+        tar xvf secret_key.tar
+        gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
+        --output test_credentials.tar test_credentials.tar.gpg
+        tar xvf test_credentials.tar
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
     - run: npm ci
