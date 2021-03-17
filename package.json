@@ -39,7 +39,7 @@
     "@types/chai": "^4.2.15",
     "@types/express": "^4.17.11",
     "@types/firebase": "^3.2.1",
-    "@types/jsonwebtoken": "^8.5.0",
+    "@types/jsonwebtoken": "^8.5.1",
     "@types/mocha": "^8.2.1",
     "@types/morgan": "^1.9.2",
     "@types/sinon": "^9.0.11",
