@@ -23,7 +23,7 @@ jobs:
           - 14.x
           - 15.x
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    name: Build and Test
+    name: Build and test
 
     steps:
     - name: Checkout
@@ -61,6 +61,27 @@ jobs:
           name: coverage
           path: coverage/
           
+  uploadResult:
+  
+      needs: build
+      name: Upload result
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        
+      - uses: actions/download-artifact@v2
+        name: Download coverage-summary.json
+        with:
+          name: coverage
+
+      - name: Upload data
+        run: chmod +x .github/scripts/rest_connect.sh; sh .github/scripts/rest_connect.sh
+        env:
+          USER: ${{ secrets.REST_USER }}
+          PASSWORD: ${{ secrets.REST_PASSWORD }}
+
+          
   merge:
   
       permissions:
@@ -83,22 +104,4 @@ jobs:
             PR_URL: ${{github.event.pull_request.html_url}}
             GITHUB_TOKEN: ${{secrets.TOKEN}}
   
-  uploadResult:
   
-      needs: build
-      name: Upload Result
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v2
-        name: Checkout
-        
-      - uses: actions/download-artifact@v2
-        name: Download coverage-summary.json
-        with:
-          name: coverage
-
-      - name: Upload data
-        run: chmod +x .github/scripts/rest_connect.sh; sh .github/scripts/rest_connect.sh
-        env:
-          USER: ${{ secrets.REST_USER }}
-          PASSWORD: ${{ secrets.REST_PASSWORD }}
