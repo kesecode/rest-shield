@@ -1,4 +1,4 @@
-name: Merge
+name: Merge dependency updates 
 
 on:
   pull_request:
