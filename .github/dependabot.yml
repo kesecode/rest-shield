@@ -1,0 +1,42 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: develop
+  ignore:
+  - dependency-name: typescript
+    versions:
+    - 4.2.2
+    - 4.2.3
+  - dependency-name: chai
+    versions:
+    - 4.3.1
+    - 4.3.3
+    - 4.3.4
+  - dependency-name: tslog
+    versions:
+    - 3.1.2
+  - dependency-name: mocha
+    versions:
+    - 8.3.1
+  - dependency-name: firebase
+    versions:
+    - 8.2.10
+    - 8.2.7
+    - 8.2.8
+    - 8.2.9
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.15.1
+    - 4.15.2
+    - 4.16.1
+  - dependency-name: eslint
+    versions:
+    - 7.20.0
+    - 7.21.0
+  - dependency-name: firebase-admin
+    versions:
+    - 9.5.0
