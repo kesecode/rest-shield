@@ -1,12 +1,12 @@
 import jwt, { VerifyCallback } from 'jsonwebtoken'
 import config from '../config/rest-shield-config.json'
 import secretKey from '../secrets/secret_key.json'
-import auth from 'firebase'
+import firebase from 'firebase/compat/app'
 import AuthManaging from './interfaces/AuthManaging'
 const firebaseConfig = require(config.firebase_config_location)
 
 class AuthManager implements AuthManaging {
-  private static firebase = auth.initializeApp(firebaseConfig)
+  private static firebaseApp = firebase.initializeApp(firebaseConfig)
 
   verify(token: string, handler: VerifyCallback) {
     jwt.verify(token, secretKey.secret, handler)
@@ -34,7 +34,7 @@ class AuthManager implements AuthManaging {
     } else {
       return res.status(500).json({ error: 'Authorization header is missing' })
     }
-    AuthManager.firebase
+    AuthManager.firebaseApp
       .auth()
       .signInWithEmailAndPassword(username, password)
       .then(() => {
