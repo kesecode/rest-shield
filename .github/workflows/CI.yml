@@ -23,7 +23,7 @@ jobs:
           - 14.x
           - 15.x
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    name: Build and Test
+    name: Build and test
 
     steps:
     - name: Checkout
@@ -60,11 +60,11 @@ jobs:
       with:
           name: coverage
           path: coverage/
-  
+          
   uploadResult:
   
       needs: build
-      name: Upload Result
+      name: Upload result
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v2
@@ -80,3 +80,28 @@ jobs:
         env:
           USER: ${{ secrets.REST_USER }}
           PASSWORD: ${{ secrets.REST_PASSWORD }}
+
+          
+  merge:
+  
+      permissions:
+        pull-requests: write
+        contents: write
+  
+      needs: build
+      name: Merge dependency updates
+      runs-on: ubuntu-latest
+      if: ${{ github.actor == 'dependabot[bot]' }}
+      steps:
+        - name: Dependabot metadata
+          id: metadata
+          uses: dependabot/fetch-metadata@v1.1.1
+          with:
+            github-token: "${{ secrets.GITHUB_TOKEN }}"
+        - name: Enable auto-merge for Dependabot PRs
+          run: gh pr merge --auto --merge "$PR_URL"
+          env:
+            PR_URL: ${{github.event.pull_request.html_url}}
+            GITHUB_TOKEN: ${{secrets.TOKEN}}
+  
+  
