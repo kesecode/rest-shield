@@ -67,7 +67,6 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /opt/hosted-services/rest-shield/
-            git fetch --all
-            git reset --hard origin/main
+            git pull
             npm clean-install
             pm2 restart /opt/hosted-services/rest-shield/server.ts --name rest-shield
