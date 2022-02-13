@@ -19,9 +19,9 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 14.18.1
-          - ${{ secrets.NODE_INSTALLED_VERSION }}
-          - 17.0.1
+          - 14
+          - 16
+          - 17
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and test
 
