@@ -15,6 +15,10 @@ let authRouter = new AuthRouterFactory().makeRouter()
 let postRouter = new PostRouterFactory().makeRouter()
 let getRouter = new GetRouterFactory().makeRouter()
 
+api.get('/', function(req, res) {
+  res.sendFile('/landing-page/index.html');
+});
+
 api.use('/auth', authRouter)
 api.use('/post', postRouter)
 api.use('/get', getRouter)
