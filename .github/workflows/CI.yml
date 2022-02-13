@@ -19,17 +19,17 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 16.x
-          - 17.x
-          - 18.x
+          - 14.18.1
+          - 16.14.0
+          - 17.0.1
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and test
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.4.0
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2.5.1
       with:
         node-version: ${{ matrix.node-version }}
     - name: Decrypt secrets
@@ -55,7 +55,7 @@ jobs:
       name: Build
     - run: npm test
       name: Test
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2.3.1
       name: Upload coverage-summary.json
       with:
           name: coverage
@@ -70,10 +70,10 @@ jobs:
       name: Upload result
       
       steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.4.0
         name: Checkout
         
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2.1.0
         name: Download coverage-summary.json
         with:
           name: coverage
