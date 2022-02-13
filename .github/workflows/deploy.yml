@@ -6,6 +6,7 @@ on:
      - main
  
 jobs:
+
   build:
 
     runs-on: ubuntu-latest
@@ -13,8 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 10.x
-          - 12.x
+          - 16
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and test
 
@@ -50,9 +50,13 @@ jobs:
       name: Test
  
   deploy:
-    name: Deploy
+  
     runs-on: ubuntu-latest
+    
+    name: Deploy
+    
     needs: build
+    
     steps:
       - name: Deploy rest-shield
         uses: appleboy/ssh-action@v0.1.4
