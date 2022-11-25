@@ -20,8 +20,8 @@ jobs:
       matrix:
         node-version:
           - v14
-          - v16
           - v17
+          - v18
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and test
 
