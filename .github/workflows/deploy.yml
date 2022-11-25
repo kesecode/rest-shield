@@ -59,7 +59,7 @@ jobs:
     
     steps:
       - name: Deploy rest-shield
-        uses: appleboy/ssh-action@v0.1.4
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_ADDRESS }}
           username: ${{ secrets.SSH_USER }}
