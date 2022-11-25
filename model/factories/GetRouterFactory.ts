@@ -1,8 +1,10 @@
+import path from 'path'
 import Repository from '../Repository'
 import express, { Router } from 'express'
 import DatabaseManaging from '../interfaces/DatabaseManaging'
 import DatabaseManager from '../DatabaseManager'
 import RepositoryAttributeType from '../enums/RepositoryAttributeType'
+import { refreshToken } from 'firebase-admin/app'
 
 class GetRouterFactory {
   databaseManager: DatabaseManaging
@@ -14,7 +16,9 @@ class GetRouterFactory {
 
   makeRouter(): Router {
     this.router.get('/', (req: any, res: any) => {
-      return res.status(200).send('hello')
+      res.status(200)
+      res.sendFile(path.join(__dirname, '../../../landing-page/index.html'));
+      return res
     })
     this.router.get('/:username/:repo/:attribute', async (req: any, res: any) => {
       try {

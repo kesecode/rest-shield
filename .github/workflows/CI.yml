@@ -20,8 +20,8 @@ jobs:
       matrix:
         node-version:
           - v14
-          - v16
           - v17
+          - v18
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     name: Build and test
 
@@ -83,6 +83,8 @@ jobs:
         env:
           USER: ${{ secrets.REST_USER }}
           PASSWORD: ${{ secrets.REST_PASSWORD }}
+          AUTH_URL: ${{ secrets.REST_AUTH_URL }}
+          POST_URL: ${{ secrets.POST_AUTH_URL }}
 
           
   merge:

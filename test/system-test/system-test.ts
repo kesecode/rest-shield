@@ -28,9 +28,8 @@ describe('System-test: Test routes with full firebase integration', () => {
     let postRouter = new PostRouterFactory(undefined, new DatabaseManager(config.test_db_root_path)).makeRouter()
     let getRouter = new GetRouterFactory(new DatabaseManager(config.test_db_root_path)).makeRouter()
 
+    api.use('/', [getRouter, postRouter])
     api.use('/auth', authRouter)
-    api.use('/post', postRouter)
-    api.use('/get', getRouter)
 
     done()
   })
@@ -64,7 +63,7 @@ describe('System-test: Test routes with full firebase integration', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/coverage')
+          .post('/testUser/testRepo/coverage')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .set({ Authorization: `Bearer ${data.token}` })
           .then(res => {
@@ -91,7 +90,7 @@ describe('System-test: Test routes with full firebase integration', () => {
     }
 
     request(api)
-      .get('/get/testUser/testRepo/coverage')
+      .get('/testUser/testRepo/coverage')
       .then(res => {
         let result = JSON.parse(JSON.parse(JSON.stringify(res)).text)
         expect.assert(expectedResult === result)
@@ -115,9 +114,8 @@ describe('System-test with errors: Test "authManager" errors', () => {
     let postRouter = new PostRouterFactory(undefined, new DatabaseManager(config.db_root_path)).makeRouter()
     let getRouter = new GetRouterFactory(new DatabaseManager()).makeRouter()
 
+    api.use('/', [getRouter, postRouter])
     api.use('/auth', authRouter)
-    api.use('/post', postRouter)
-    api.use('/get', getRouter)
 
     done()
   })
@@ -148,7 +146,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/coverage')
+          .post('/testUser/testRepo/coverage')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .then(res => {
             expect.assert(res.status === 403)
@@ -166,7 +164,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/coverage')
+          .post('/testUser/testRepo/coverage')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .set({ Authorization: `Bearer ${data.token}` })
           .then(res => {
@@ -185,7 +183,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/notexisting')
+          .post('/testUser/testRepo/notexisting')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .set({ Authorization: `Bearer ${data.token}` })
           .then(res => {
