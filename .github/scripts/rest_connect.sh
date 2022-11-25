@@ -1,5 +1,4 @@
 #!/bin/sh
-
 COVERAGE=`jq -r '.total.lines.pct' coverage-summary.json`
 COVERAGE=$(echo ${COVERAGE%.*})
 
