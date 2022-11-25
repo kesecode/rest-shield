@@ -24,10 +24,10 @@ describe('Unit-test: get-router', () => {
   it('should get a status 200', done => {
     let router = new GetRouterFactory(new DatabaseManagerMock('test')).makeRouter()
     let server = api.listen(3002, () => {})
-    api.use('/get', router)
+    api.use('/', router)
 
     request(api)
-      .get('/get')
+      .get('/')
       .then(res => {
         expect.assert(res.status === 200)
         done()
@@ -38,10 +38,10 @@ describe('Unit-test: get-router', () => {
   it('should get a status 200 or 204 back', done => {
     let router = new GetRouterFactory(new DatabaseManagerMock('test')).makeRouter()
     let server = api.listen(3002, () => {})
-    api.use('/get', router)
+    api.use('/', router)
 
     request(api)
-      .get('/get/testUser/testRepo/someAttribute')
+      .get('/testUser/testRepo/someAttribute')
       .then(res => {
         expect.assert(res.status === 200 || res.status === 204)
         done()
@@ -52,10 +52,10 @@ describe('Unit-test: get-router', () => {
   it('should get an 500 error back', done => {
     let router = new GetRouterFactory(new DatabaseManagerMock('test', false)).makeRouter()
     let server = api.listen(3002, () => {})
-    api.use('/get', router)
+    api.use('/', router)
 
     request(api)
-      .get('/get/testUser/testRepo/someAttribute')
+      .get('/testUser/testRepo/someAttribute')
       .then(res => {
         expect.assert(res.status === 500)
         done()
