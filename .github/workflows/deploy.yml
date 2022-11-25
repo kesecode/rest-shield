@@ -69,4 +69,4 @@ jobs:
             cd /opt/hosted-services/rest-shield/
             git pull
             npm clean-install
-            pm2 restart /opt/hosted-services/rest-shield/server.ts --name rest-shield
+            pm2 restart rest-shield
