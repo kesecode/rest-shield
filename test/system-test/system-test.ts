@@ -146,7 +146,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/coverage')
+          .post('/testUser/testRepo/coverage')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .then(res => {
             expect.assert(res.status === 403)
@@ -164,7 +164,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/coverage')
+          .post('/testUser/testRepo/coverage')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .set({ Authorization: `Bearer ${data.token}` })
           .then(res => {
@@ -183,7 +183,7 @@ describe('System-test with errors: Test "authManager" errors', () => {
       .then(res => {
         let data = JSON.parse(res.text)
         request(api)
-          .post('/post/testUser/testRepo/notexisting')
+          .post('/testUser/testRepo/notexisting')
           .set({ json: `{"value": ${randomizedCoverage}}` })
           .set({ Authorization: `Bearer ${data.token}` })
           .then(res => {

@@ -29,8 +29,9 @@ describe('Unit-test: get-router', () => {
     request(api)
       .get('/')
       .then(res => {
-        expect.assert(res.status === 200)
         done()
+        expect.assert(res.status === 200)
+        //done()
       })
     server.close()
   })

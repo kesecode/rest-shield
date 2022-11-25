@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "name": "Skript ausführen: start",
+            "request": "launch",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
