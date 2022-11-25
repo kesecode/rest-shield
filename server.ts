@@ -15,6 +15,5 @@ let authRouter = new AuthRouterFactory().makeRouter()
 let postRouter = new PostRouterFactory().makeRouter()
 let getRouter = new GetRouterFactory().makeRouter()
 
+api.use('/', [getRouter, postRouter])
 api.use('/auth', authRouter)
-api.use('/post', postRouter)
-api.use('/get', getRouter)

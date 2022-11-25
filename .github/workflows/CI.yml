@@ -83,6 +83,8 @@ jobs:
         env:
           USER: ${{ secrets.REST_USER }}
           PASSWORD: ${{ secrets.REST_PASSWORD }}
+          AUTH_URL: ${{ secrets.REST_AUTH_URL }}
+          POST_URL: ${{ secrets.POST_AUTH_URL }}
 
           
   merge:

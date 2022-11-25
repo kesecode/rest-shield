@@ -1,3 +1,4 @@
+import path from 'path'
 import Repository from '../Repository'
 import express, { Router } from 'express'
 import DatabaseManaging from '../interfaces/DatabaseManaging'
@@ -14,7 +15,7 @@ class GetRouterFactory {
 
   makeRouter(): Router {
     this.router.get('/', (req: any, res: any) => {
-      return res.status(200).send('hello')
+      res.sendFile(path.join(__dirname, '../../../landing-page/index.html'));
     })
     this.router.get('/:username/:repo/:attribute', async (req: any, res: any) => {
       try {
