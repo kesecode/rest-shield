@@ -1,5 +1,11 @@
 {
     "configurations": [
+    {
+        "command": "npm test",
+        "name": "Run npm test",
+        "request": "launch",
+        "type": "node-terminal"
+    },
         {
             "type": "node",
             "name": "Skript ausführen: start",

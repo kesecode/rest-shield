@@ -23,7 +23,6 @@ describe('Unit-test: auth-router', () => {
 
   it('should get a token and 200 back', done => {
     let router = new AuthRouterFactory(new AuthManagerMock(true)).makeRouter()
-    let server = api.listen(3002, () => {})
     api.use('/auth', router)
 
     request(api)
@@ -34,12 +33,10 @@ describe('Unit-test: auth-router', () => {
         expect.assert(res.status === 200)
         done()
       })
-    server.close()
   })
 
   it('should get an 403 error back', done => {
     let router = new AuthRouterFactory(new AuthManagerMock(false)).makeRouter()
-    let server = api.listen(3002, () => {})
     api.use('/auth', router)
 
     request(api)
@@ -48,6 +45,5 @@ describe('Unit-test: auth-router', () => {
         expect.assert(res.status === 403)
         done()
       })
-    server.close()
   })
 })

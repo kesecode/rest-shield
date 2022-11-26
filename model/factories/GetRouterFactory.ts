@@ -16,9 +16,7 @@ class GetRouterFactory {
 
   makeRouter(): Router {
     this.router.get('/', (req: any, res: any) => {
-      res.status(200)
-      res.sendFile(path.join(__dirname, '../../../landing-page/index.html'));
-      return res
+      res.status(200).sendFile(path.join(__dirname, '../../../landing-page/index.html'));
     })
     this.router.get('/:username/:repo/:attribute', async (req: any, res: any) => {
       try {
