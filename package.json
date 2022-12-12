@@ -32,7 +32,7 @@
     "firebase-admin": "^11.3.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "sinon": "^14.0.2",
+    "sinon": "^15.0.0",
     "tslog": "^4.4.4"
   },
   "devDependencies": {
