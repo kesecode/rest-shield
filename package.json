@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/kesecode/rest-shield#readme",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
     "eslint": "^8.31.0",
     "eslint-config-airbnb": "^19.0.4",
     "express": "^4.18.2",
