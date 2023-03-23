@@ -4,3 +4,7 @@
 ![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Frest.davidweppler.dev%2Fkesecode%2Frest-shield%2Fcoverage)
 
 JSON-endpoint for shield.io codecoverage badges
+
+Inititial credentials for Pocketbase:
+email: initial@admin.io
+password: change__me
