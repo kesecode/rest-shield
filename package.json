@@ -4,7 +4,8 @@
   "description": "RestAPI for creating shield.io badges",
   "main": "server.ts",
   "scripts": {
-    "start": "tsc && node dist/server.js",
+    "start": "docker compose -f database/pocketbase.yml up -d && tsc && node dist/server.js",
+    "dev": "tsc && REST_SHIELD_PORT=$(jq '.dev_port' config/rest-shield-config.json) node dist/server.js",
     "test": "nyc --reporter=json-summary mocha --require ts-node/register --exit --watch-extensions ts './test/**/*.ts'",
     "posttest": "jq -n --arg cov $(jq -r '.total.lines.pct' coverage/coverage-summary.json) '{\"value\": $cov}' > coverage/coverage.json"
   },
@@ -32,6 +33,7 @@
     "firebase-admin": "^11.5.0",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
+    "pocketbase": "^0.12.1",
     "sinon": "^15.0.1",
     "tslog": "^4.7.2"
   },

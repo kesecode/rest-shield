@@ -4,7 +4,7 @@ import GetRouterFactory from './model/factories/GetRouterFactory'
 import AuthRouterFactory from './model/factories/AuthRouterFactory'
 import express from 'express'
 
-const PORT = config.port
+const PORT = process.env.REST_SHIELD_PORT
 const api = express()
 
 api.listen(PORT, () => {
