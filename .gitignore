@@ -119,3 +119,5 @@ database/data/data.db-shm
 database/data/data.db-wal
 database/data/logs.db-shm
 database/data/logs.db-wal
+database/data/data.db
+database/data/logs.db

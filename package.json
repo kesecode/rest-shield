@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "start": "docker compose -f database/pocketbase.yml up -d && tsc && node dist/server.js",
-    "dev": "docker compose -f database/pocketbase.yml up -d && node init.mjs && tsc && DATABASE=$(jq '.dev_database' config/rest-shield-config.json) && REST_SHIELD_PORT=$(jq '.dev_port' config/rest-shield-config.json) node dist/server.js",
+    "dev": "cp ./config/initial_data.db ./database/data/data.db && docker compose -f database/pocketbase.yml up -d && node init.mjs && tsc && DATABASE=$(jq '.dev_database' config/rest-shield-config.json) && REST_SHIELD_PORT=$(jq '.dev_port' config/rest-shield-config.json) node dist/server.js",
     "test": "nyc --reporter=json-summary mocha --require ts-node/register --exit --watch-extensions ts './test/**/*.ts'",
     "posttest": "jq -n --arg cov $(jq -r '.total.lines.pct' coverage/coverage-summary.json) '{\"value\": $cov}' > coverage/coverage.json"
   },
