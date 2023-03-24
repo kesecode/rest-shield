@@ -2,6 +2,7 @@ import config from '../config/rest-shield-config.json'
 import admin from 'firebase-admin'
 import PocketBase from 'pocketbase'
 import DatabaseManaging from './interfaces/DatabaseManaging'
+import { RepositoriesRecord, RepositoriesResponse, RepositoryAttributesRecord, RepositoryAttributesResponse, UsersRecord, UsersResponse } from '../database/pocketbase-types'
 
 const serviceAccount = require(config.firebase_service_acc_key_location)
 
@@ -19,15 +20,15 @@ class DatabaseManager implements DatabaseManaging {
   }
 
   getUser(username: string) {
-    return DatabaseManager.pocketbase.collection('users').getFirstListItem(`username=${username}`)
+    return DatabaseManager.pocketbase.collection('users').getFirstListItem(`username=${username}`) as unknown as UsersResponse
   }
 
   getRepository(userId: string, repositoryName: string) {
-    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`user=${userId} && title=${repositoryName}`)
+    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`user=${userId} && title=${repositoryName}`) as unknown as RepositoriesResponse
   }
 
   getRepositoryAttribute(repositoryId: string, attributeType: string) {
-    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`repository=${repositoryId} && attribute_type=${attributeType}`)
+    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`repository=${repositoryId} && attribute_type=${attributeType}`) as unknown as RepositoryAttributesResponse
   }
 
   setDocument(collectionPath: string, document: string, data: object) {
