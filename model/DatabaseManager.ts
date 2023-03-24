@@ -1,5 +1,6 @@
 import config from '../config/rest-shield-config.json'
 import admin from 'firebase-admin'
+import PocketBase from 'pocketbase'
 import DatabaseManaging from './interfaces/DatabaseManaging'
 
 const serviceAccount = require(config.firebase_service_acc_key_location)
@@ -9,11 +10,24 @@ admin.initializeApp({
 })
 
 class DatabaseManager implements DatabaseManaging {
+  private static pocketbase = new PocketBase(process.env.DATABASE)
   private static firestore = admin.firestore()
   rootPath: string
 
   constructor(rootPath: string = config.db_root_path) {
     this.rootPath = rootPath
+  }
+
+  getUser(username: string) {
+    return DatabaseManager.pocketbase.collection('users').getFirstListItem(`username=${username}`)
+  }
+
+  getRepository(userId: string, repositoryName: string) {
+    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`user=${userId} && title=${repositoryName}`)
+  }
+
+  getRepositoryAttribute(repositoryId: string, attributeType: string) {
+    return DatabaseManager.pocketbase.collection('repositories').getFirstListItem(`repository=${repositoryId} && attribute_type=${attributeType}`)
   }
 
   setDocument(collectionPath: string, document: string, data: object) {
