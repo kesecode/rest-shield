@@ -1,5 +1,6 @@
 {
   "dev_port": 4000,
+  "dev_database": "http://localhost:8090",
   "suppress_log_output": false,
   "firebase_service_acc_key_location": "../secrets/firestore_key.json",
   "firebase_config_location": "../secrets/firebase_config.json",
