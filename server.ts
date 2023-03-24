@@ -1,4 +1,3 @@
-import config from './config/rest-shield-config.json'
 import PostRouterFactory from './model/factories/PostRouterFactory'
 import GetRouterFactory from './model/factories/GetRouterFactory'
 import AuthRouterFactory from './model/factories/AuthRouterFactory'
@@ -6,6 +5,7 @@ import express from 'express'
 
 const PORT = process.env.REST_SHIELD_PORT
 const api = express()
+
 
 api.listen(PORT, () => {
   console.info('API listens @ port', PORT)
