@@ -33,7 +33,7 @@
     "firebase-admin": "^11.5.0",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "pocketbase": "^0.12.1",
+    "pocketbase": "^0.13.1",
     "sinon": "^15.0.1",
     "tslog": "^4.7.2"
   },
